@@ -32,7 +32,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         viewController?.showNetworkError(message: message)
     }
 
-    func didReceiveNextQuestion(question: QuizQuestion?) {  // Исправлено с didRecieve на didReceive
+    func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
         }
@@ -73,10 +73,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
 
     func yesButtonClicked() {
+        viewController?.setButtonsEnabled(false) // Блокируем кнопки
         didAnswer(isYes: true)
     }
 
     func noButtonClicked() {
+        viewController?.setButtonsEnabled(false) // Блокируем кнопки
         didAnswer(isYes: false)
     }
 
@@ -113,14 +115,14 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                 buttonText: "Сыграть ещё раз",
                 completion: { [weak self] in
                     self?.restartGame()
-                }) 
+                })
             viewController?.show(quiz: viewModel)
         } else {
             self.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
         }
+        viewController?.setButtonsEnabled(true) // Разблокируем кнопки
     }
-
 
     func makeResultsMessage() -> String {
         statisticService?.store(correct: correctAnswers, total: questionsAmount)
