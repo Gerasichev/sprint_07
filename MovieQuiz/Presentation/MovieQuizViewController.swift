@@ -7,7 +7,9 @@ protocol MovieQuizViewControllerProtocol: AnyObject {
     func showLoadingIndicator()
     func hideLoadingIndicator()
     func showNetworkError(message: String)
+    func setButtonsEnabled(_ isEnabled: Bool) // Добавляем метод в протокол
 }
+
 
 final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     @IBOutlet private var imageView: UIImageView!
@@ -41,6 +43,12 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         presenter.noButtonClicked()
     }
+    
+    func setButtonsEnabled(_ isEnabled: Bool) {
+        yesButton.isEnabled = isEnabled
+        noButton.isEnabled = isEnabled
+    }
+
 
     // MARK: - Private functions
 
@@ -73,6 +81,8 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+        
+        setButtonsEnabled(false)
     }
 
     func showLoadingIndicator() {
